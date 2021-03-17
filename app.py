@@ -28,15 +28,17 @@ def home():
 	"/api/v1.0/start<br>"
 	"/api/v1.0/start/end")
 
-# define precipitation route
+#4 define precipitation route
 @app.route("/api/v1.0/precipitation")
 def precipitation():
 	return ("/api/v1.0/precipitation")
 
 session = Session(engine)
-    # Query most recent 12 months precipitation data
-    temp_data_active=session.query(Measurement.date, Measurement.tobs).filter(Measurement.date>='2016-08-18').filter(Measurement.station=='USC00519281').all()
+    
+#5 Query most recent 12 months precipitation data
+temp_data_active=session.query(Measurement.date, Measurement.tobs).filter(Measurement.date>='2016-08-18').filter(Measurement.station=='USC00519281').all()
     session.close()
+
 prcp_json = []
     for date, prcp in prcp_data:
        prcp_dict = {}
@@ -45,8 +47,23 @@ prcp_json = []
        prcp_json.append(prcp_dict)
     # Convert list of tuples into normal list
     return jsonify(prcp_json)	
-# @app.route("/api/v1.0/precipitation")
-# def precipitation():
+
+
+
+#6 define route for stations
+@app.route("/api/v1.0/stations")
+def stations():
+	return ("/api/v1.0/stations")
+
+#Return a JSON list of stations from the dataset.
+prcp_json = []
+    for stations, sta in sta_data:
+       sta_dict = {}
+       sta_dict["stations"] = stations
+       sta_json.append(sta_dict)
+    # Convert list of tuples into normal list
+    return jsonify(sta_json)	
+
 
 if __name__=="__main__":
 	app.run(debug=True)
