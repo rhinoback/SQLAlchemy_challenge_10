@@ -92,6 +92,9 @@ temp_data_json = []
 
 
 
+#session.query(func.avg(mes.tobs), func.max(mes.tobs), func.min(mes.tobs)).all()
+
+
 
 if __name__=="__main__":
 	app.run(debug=True)
