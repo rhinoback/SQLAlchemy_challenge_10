@@ -28,13 +28,25 @@ def home():
 	"/api/v1.0/start<br>"
 	"/api/v1.0/start/end")
 
+# define precipitation route
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+	return ("/api/v1.0/precipitation")
 
-
+session = Session(engine)
+    # Query most recent 12 months precipitation data
+    temp_data_active=session.query(Measurement.date, Measurement.tobs).filter(Measurement.date>='2016-08-18').filter(Measurement.station=='USC00519281').all()
+    session.close()
+prcp_json = []
+    for date, prcp in prcp_data:
+       prcp_dict = {}
+       prcp_dict["date"] = date
+       prcp_dict["prcp"] = prcp
+       prcp_json.append(prcp_dict)
+    # Convert list of tuples into normal list
+    return jsonify(prcp_json)	
 # @app.route("/api/v1.0/precipitation")
 # def precipitation():
-# 	name="Ryan Rhino"
-# 	print("yikes there is a rhino")
-# 	return f"This page is about {name}"
 
 if __name__=="__main__":
 	app.run(debug=True)
