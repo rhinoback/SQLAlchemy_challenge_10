@@ -55,14 +55,42 @@ prcp_json = []
 def stations():
 	return ("/api/v1.0/stations")
 
+session = Session(engine)
+    
+#5 Query stations lists
+sta_list=session.query(stations,sta).filter(sta.id).all()
+    session.close()
 #Return a JSON list of stations from the dataset.
-prcp_json = []
+sta_json = []
     for stations, sta in sta_data:
        sta_dict = {}
        sta_dict["stations"] = stations
        sta_json.append(sta_dict)
     # Convert list of tuples into normal list
-    return jsonify(sta_json)	
+    return jsonify(sta_json)
+
+
+#7 define route for temp_data
+@app.route("/api/v1.0/temp_data_active")
+def temp_data_active():
+	return ("/api/v1.0/temp_data_active")
+
+session = Session(engine)
+
+temp_data_active=session.query(mes.date, mes.tobs).\
+filter(mes.date>='2016-08-18').filter(mes.station=='USC00519281').all()
+	session.close()
+
+temp_data_json = []
+    for date, temp in temp_data_active:
+       temp_data_dict = {}
+       temp_data_dict["date"] = date
+       temp_data_dict["temp"] = temp
+       temp_data_json.append(temp_data_dict)
+    # Convert list of tuples into normal list
+    return jsonify(temp_data_json)
+
+
 
 
 if __name__=="__main__":
